@@ -125,7 +125,7 @@
       max-width: 35vw;
     }
 
-    /* GIF Nuevo - Reemplazó al gato bailando (Lado izquierdo, media altura) */
+    /* GIF Nuevo (Lado izquierdo) */
     .new-gif {
       top: 45%;
       left: 25px;
@@ -200,13 +200,67 @@
       display: block;
     }
 
-    /* REPRODUCTOR OCULTO DE YOUTUBE */
-    #music-player {
-      position: absolute;
-      width: 0;
-      height: 0;
-      border: 0;
-      visibility: hidden;
+    /* ESTILO ANUNCIO / NOTIFICACIÓN POP-UP (ck.jpeg) */
+    .ad-popup {
+      width: 100%;
+      max-width: 460px;
+      background: #111;
+      border: 3px double #ff0000;
+      box-shadow: 0 0 25px #ff0000, inset 0 0 10px #8b0000;
+      margin: 20px 0;
+      padding: 8px;
+      position: relative;
+      animation: pulse-ad 2s infinite alternate;
+    }
+
+    .ad-header {
+      background: #8b0000;
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .ad-close-btn {
+      background: #000;
+      color: #ff0000;
+      border: 1px solid #ff0000;
+      padding: 0 5px;
+      cursor: default;
+      font-weight: bold;
+    }
+
+    .ad-body {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid #8b0000;
+    }
+
+    .ad-body img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ad-footer {
+      font-size: 11px;
+      color: #ff3333;
+      text-transform: uppercase;
+      margin-top: 6px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    @keyframes pulse-ad {
+      0% { box-shadow: 0 0 15px #8b0000; }
+      100% { box-shadow: 0 0 30px #ff0000; }
     }
   </style>
 </head>
@@ -235,11 +289,26 @@
         <div class="insta-post">
           <img src="kcc.jpeg" alt="Khrista 2">
         </div>
+
+        <!-- FOTO ck.jpeg TRANSFORMADA EN ANUNCIO / NOTIFICACIÓN -->
+        <div class="ad-popup">
+          <div class="ad-header">
+            <span>⚠️ SPONSORED AD / NOTIFICATION</span>
+            <span class="ad-close-btn">X</span>
+          </div>
+          <div class="ad-body">
+            <img src="ck.jpeg" alt="Anuncio Khrista">
+          </div>
+          <div class="ad-footer">
+            --- CLICK TO SPONSOR KHRISTA ---
+          </div>
+        </div>
+
         <div class="insta-post">
           <img src="kccc.jpeg" alt="Khrista 3">
         </div>
         <div class="insta-post">
-          <img src="ck.jpeg" alt="Khrista 4">
+          <img src="kkc.jpeg" alt="Khrista 5">
         </div>
       </div>
 
@@ -252,25 +321,29 @@
     <!-- Gatito zombie (Abajo derecha) -->
     <img src="https://i.pinimg.com/originals/44/06/b4/4406b49c3a5106982f83456c0cb21475.gif" alt="Gatito Zombie" class="decor zombie-cat">
 
-    <!-- GIF Nuevo (Reemplazó al gato bailando - Lado izquierdo) -->
+    <!-- GIF Nuevo (Lado izquierdo) -->
     <img src="https://i.pinimg.com/originals/48/dd/9e/48dd9e50b3c7be0dbf161a82c45bcede.gif" alt="GIF Nuevo" class="decor new-gif">
 
   </div>
 
-  <!-- REPRODUCTOR DE MÚSICA (QUEEN - KILLER QUEEN) -->
-  <iframe id="music-player" allow="autoplay"></iframe>
+  <!-- REPRODUCTOR DE AUDIO DIRECTO (SIN COMERCIALES) -->
+  <audio id="music-player" loop preload="auto">
+    <source src="https://ia801309.us.archive.org/28/items/QueenKillerQueen_201708/Queen%20-%20Killer%20Queen.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     function enterSite() {
       const s1 = document.getElementById('screen1');
       const s2 = document.getElementById('screen2');
+      const player = document.getElementById('music-player');
 
       s1.classList.add('hidden');
       s2.classList.add('visible');
 
-      // Reproducir la canción Killer Queen al hacer clic en ENTER
-      const player = document.getElementById('music-player');
-      player.src = "https://www.youtube.com/embed/2ZBtPf7FOoM?autoplay=1&loop=1&playlist=2ZBtPf7FOoM";
+      // Reproducción inmediata sin anuncios
+      player.play().catch(function(error) {
+        console.log("Error al reproducir audio:", error);
+      });
     }
   </script>
 </body>
