@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,7 +15,7 @@
     body, html {
       width: 100%;
       height: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
       font-family: 'Courier New', Courier, monospace;
       background-color: #000;
       color: #8b0000;
@@ -27,7 +27,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      min-height: 100vh;
       transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
     }
 
@@ -40,27 +40,28 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 25px;
+      gap: 30px;
+      height: 100vh;
     }
 
     #screen1 .warning-gif {
-      max-width: 80%;
-      max-height: 40vh;
-      border: 2px solid #8b0000;
-      box-shadow: 0 0 15px #ff0000;
+      width: 320px;
+      max-width: 85vw;
+      border: 3px solid #8b0000;
+      box-shadow: 0 0 20px #ff0000;
     }
 
     .enter-btn {
       background: #000;
       color: #ff0000;
       border: 3px solid #8b0000;
-      padding: 15px 40px;
-      font-size: 24px;
+      padding: 18px 50px;
+      font-size: 28px;
       font-weight: bold;
-      letter-spacing: 4px;
+      letter-spacing: 5px;
       cursor: pointer;
       text-transform: uppercase;
-      box-shadow: 0 0 10px #8b0000, inset 0 0 10px #8b0000;
+      box-shadow: 0 0 15px #8b0000, inset 0 0 10px #8b0000;
       transition: all 0.3s ease;
       font-family: 'Courier New', Courier, monospace;
     }
@@ -69,8 +70,8 @@
       background: #8b0000;
       color: #000;
       border-color: #ff0000;
-      box-shadow: 0 0 25px #ff0000, inset 0 0 15px #000;
-      transform: scale(1.08);
+      box-shadow: 0 0 30px #ff0000, inset 0 0 15px #000;
+      transform: scale(1.1);
       text-shadow: 0 0 5px #000;
     }
 
@@ -82,6 +83,11 @@
       background: url("https://i.pinimg.com/vwebp/736x/a2/8c/a1/a28ca1f13132b630c23a9ae1b9fc662c.webp") no-repeat center center fixed;
       background-size: cover;
       position: relative;
+      padding: 40px 20px 80px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
     }
 
     /* ESTADO OCULTO PANTALLA 1 */
@@ -96,67 +102,103 @@
       visibility: visible;
     }
 
-    /* DECORACIONES PANTALLA 2 */
+    /* DECORACIONES PANTALLA 2 (GIFS MÁS GRANDES Y FIJOS) */
     .decor {
-      position: absolute;
+      position: fixed;
       user-select: none;
       pointer-events: none;
+      z-index: 20;
     }
 
     /* Murciélago - Abajo Izquierda */
     .bat {
-      bottom: 10px;
-      left: 10px;
-      width: 150px;
-      max-width: 30vw;
+      bottom: 20px;
+      left: 20px;
+      width: 260px;
+      max-width: 38vw;
     }
 
     /* Gatito zombie - Abajo Derecha */
     .zombie-cat {
-      bottom: 10px;
-      right: 10px;
-      width: 140px;
-      max-width: 30vw;
+      bottom: 20px;
+      right: 20px;
+      width: 230px;
+      max-width: 35vw;
     }
 
     /* Gato bailando - Lado izquierdo a media altura */
     .dancing-cat {
-      top: 50%;
-      left: 20px;
+      top: 45%;
+      left: 25px;
       transform: translateY(-50%);
-      width: 120px;
-      max-width: 25vw;
+      width: 220px;
+      max-width: 32vw;
     }
 
-    /* ESTILO EMO/GÓTICO CONTAINER PRINCIPAL (VACÍO POR AHORA PARA FUTURO CONTENIDO) */
+    /* ESTILO MYSPACE / GALLERY CONTAINER */
     .myspace-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80%;
-      max-width: 600px;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.75);
-      border: 2px solid #8b0000;
-      box-shadow: 0 0 20px #8b0000;
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 550px;
+      padding: 25px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 3px solid #8b0000;
+      box-shadow: 0 0 25px #8b0000, 0 0 10px #000;
       text-align: center;
       color: #ff3333;
+      margin-top: 20px;
+      margin-bottom: 40px;
     }
 
     .myspace-header {
-      font-size: 28px;
+      font-size: 30px;
       text-transform: uppercase;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       margin-bottom: 10px;
-      text-shadow: 2px 2px 4px #000, 0 0 10px #ff0000;
+      text-shadow: 2px 2px 4px #000, 0 0 12px #ff0000;
     }
 
     .myspace-divider {
       height: 2px;
       background: #8b0000;
-      margin: 15px 0;
-      box-shadow: 0 0 5px #ff0000;
+      margin: 15px 0 25px 0;
+      box-shadow: 0 0 8px #ff0000;
+    }
+
+    /* GALERÍA DE FOTOS ESTILO INSTAGRAM (1:1 CUADRADAS) */
+    .photo-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .insta-post {
+      width: 100%;
+      max-width: 480px;
+      aspect-ratio: 1 / 1;
+      border: 2px solid #8b0000;
+      background: #000;
+      box-shadow: 0 0 15px rgba(139, 0, 0, 0.6);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .insta-post:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 25px #ff0000;
+    }
+
+    .insta-post img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
   </style>
 </head>
@@ -168,17 +210,34 @@
     <button class="enter-btn" onclick="enterSite()">ENTER</button>
   </div>
 
-  <!-- PANTALLA 2 (PRINCIPAL) -->
+  <!-- PANTALLA 2 (PRINCIPAL CON FOTOS) -->
   <div id="screen2" class="screen">
     
-    <!-- Contenedor central MySpace/SpaceHey estilo gótico -->
+    <!-- Contenedor central MySpace / Galería -->
     <div class="myspace-container">
       <h1 class="myspace-header">Happy Birthday Khrista</h1>
       <div class="myspace-divider"></div>
-      <p style="letter-spacing: 1px;">🖤 Welcome to the dark side... 🖤</p>
+      <p style="letter-spacing: 1px; margin-bottom: 25px;">🖤 Welcome to the dark side... 🖤</p>
+
+      <!-- PUBLICACIONES TIPO INSTAGRAM -->
+      <div class="photo-gallery">
+        <div class="insta-post">
+          <img src="kc.jpeg" alt="Khrista 1">
+        </div>
+        <div class="insta-post">
+          <img src="kcc.jpeg" alt="Khrista 2">
+        </div>
+        <div class="insta-post">
+          <img src="kccc.jpeg" alt="Khrista 3">
+        </div>
+        <div class="insta-post">
+          <img src="ck.jpeg" alt="Khrista 4">
+        </div>
+      </div>
+
     </div>
 
-    <!-- GIFS DECORATIVOS -->
+    <!-- GIFS DECORATIVOS (TAMAÑO MEDIANO/GRANDE) -->
     <!-- Murciélago (Abajo izquierda) -->
     <img src="https://i.pinimg.com/originals/b2/3b/ce/b23bce7e6a41d84ca9af8b94d5b18d8f.gif" alt="Murciélago" class="decor bat">
 
@@ -201,5 +260,3 @@
   </script>
 </body>
 </html>
-
-```
