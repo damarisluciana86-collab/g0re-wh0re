@@ -1,350 +1,399 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khrista's Birthday</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL_DE_CUMPLEAÑOS_KHRISTA</title>
+    <style>
+        /* ESTILOS GENERALES (Reset & Base) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair; /* Cursor de cruz para todo el sitio */
+        }
 
-    body, html {
-      width: 100%;
-      height: 100%;
-      overflow-x: hidden;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #000;
-      color: #8b0000;
-    }
+        body, html {
+            height: 100%;
+            font-family: 'Courier New', Courier, monospace; /* Fuente estilo terminal */
+            overflow: hidden;
+            background-color: #000;
+            color: #b30000; /* Rojo sangre por defecto */
+        }
 
-    /* PANTALLAS */
-    .screen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      min-height: 100vh;
-      transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
-    }
+        /* FUENTE PIXELADA (Opcional, si quieres usarla) */
+        @font-face {
+            font-family: 'VT323';
+            src: url('https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEFzisfFJU.woff2') format('woff2');
+        }
 
-    /* PANTALLA 1 */
-    #screen1 {
-      z-index: 10;
-      background: url("https://i.pinimg.com/originals/09/1c/3c/091c3c517f8e9b43f2933cd80b898939.gif") no-repeat center center fixed;
-      background-size: cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      height: 100vh;
-    }
+        /* ANIMACIONES GLOBALES */
+        @keyframes blink { 50% { opacity: 0; } }
+        .blink { animation: blink 1s linear infinite; }
 
-    #screen1 .warning-gif {
-      width: 320px;
-      max-width: 85vw;
-      border: 3px solid #8b0000;
-      box-shadow: 0 0 20px #ff0000;
-    }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
 
-    .enter-btn {
-      background: #000;
-      color: #ff0000;
-      border: 3px solid #8b0000;
-      padding: 18px 50px;
-      font-size: 28px;
-      font-weight: bold;
-      letter-spacing: 5px;
-      cursor: pointer;
-      text-transform: uppercase;
-      box-shadow: 0 0 15px #8b0000, inset 0 0 10px #8b0000;
-      transition: all 0.3s ease;
-      font-family: 'Courier New', Courier, monospace;
-    }
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: 0%; }
+        }
 
-    .enter-btn:hover {
-      background: #8b0000;
-      color: #000;
-      border-color: #ff0000;
-      box-shadow: 0 0 30px #ff0000, inset 0 0 15px #000;
-      transform: scale(1.1);
-      text-shadow: 0 0 5px #000;
-    }
+        /* =========================================
+           PANTALLA 1 (INICIO - ADVERTENCIA) 
+           ========================================= */
+        #pantalla1 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* GIF DE FONDO PANTALLA 1 */
+            background-image: url('https://i.pinimg.com/originals/09/1c/3c/091c3c517f8e9b43f2933cd80b898939.gif');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s ease-out; /* Efecto Fade Out */
+        }
 
-    /* PANTALLA 2 */
-    #screen2 {
-      z-index: 5;
-      opacity: 0;
-      visibility: hidden;
-      background: url("https://i.pinimg.com/vwebp/736x/a2/8c/a1/a28ca1f13132b630c23a9ae1b9fc662c.webp") no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-      padding: 40px 20px 80px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-y: auto;
-    }
+        /* Contenedor central de advertencia */
+        .warn-container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border: 2px solid #b30000;
+            box-shadow: 0 0 15px #b30000;
+        }
 
-    /* ESTADO OCULTO PANTALLA 1 */
-    #screen1.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
+        /* GIF DE ADVERTENCIA CENTRAL */
+        .gif-advertencia {
+            max-width: 300px;
+            margin-bottom: 20px;
+            border: 1px solid #b30000;
+        }
 
-    /* ESTADO VISIBLE PANTALLA 2 */
-    #screen2.visible {
-      opacity: 1;
-      visibility: visible;
-    }
+        /* BOTÓN ENTER */
+        .btn-enter {
+            background-color: transparent;
+            color: #ff0000;
+            border: 3px solid #ff0000;
+            padding: 15px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 5px #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
 
-    /* DECORACIONES PANTALLA 2 */
-    .decor {
-      position: fixed;
-      user-select: none;
-      pointer-events: none;
-      z-index: 20;
-    }
+        .btn-enter:hover {
+            background-color: #ff0000;
+            color: #000;
+            box-shadow: 0 0 20px #ff0000;
+            transform: scale(1.1);
+        }
 
-    /* Murciélago - Abajo Izquierda */
-    .bat {
-      bottom: 20px;
-      left: 20px;
-      width: 260px;
-      max-width: 38vw;
-    }
+        /* =========================================
+           PANTALLA 2 (PRINCIPAL - DARK WEB) 
+           ========================================= */
+        #pantalla2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* Oculta al inicio */
+            background-color: #000;
+            /* EFECTO DE RUIDO DE TV VIEJA SUTIL */
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4u16AAAABlBMVEUAAAD///+l2Z/dAAAAbUlEQVQ4y2NgQAX8jMhABKBaYmIkGvj5+bE6mYGBgYGJmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkZGVlZFQD68AAL6QYm9gAAAABJRU5ErkJggg==');
+            z-index: 50;
+            flex-direction: column;
+        }
 
-    /* Gatito zombie - Abajo Derecha */
-    .zombie-cat {
-      bottom: 20px;
-      right: 20px;
-      width: 230px;
-      max-width: 35vw;
-    }
+        /* Efecto de línea de escaneo de TV */
+        #pantalla2::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100px;
+            background: rgba(255, 0, 0, 0.05);
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+            z-index: 60;
+        }
 
-    /* GIF Nuevo (Lado izquierdo) */
-    .new-gif {
-      top: 45%;
-      left: 25px;
-      transform: translateY(-50%);
-      width: 220px;
-      max-width: 32vw;
-    }
+        /* --- 1. BARRA DE NAVEGACIÓN "ILEGAL" --- */
+        .nav-bar {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-bottom: 2px solid #b30000;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 10px #b30000;
+            z-index: 70;
+        }
 
-    /* ESTILO MYSPACE / GALLERY CONTAINER */
-    .myspace-container {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: 550px;
-      padding: 25px;
-      background: rgba(0, 0, 0, 0.85);
-      border: 3px solid #8b0000;
-      box-shadow: 0 0 25px #8b0000, 0 0 10px #000;
-      text-align: center;
-      color: #ff3333;
-      margin-top: 20px;
-      margin-bottom: 40px;
-    }
+        .nav-logo {
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 5px #ff0000;
+        }
 
-    .myspace-header {
-      font-size: 30px;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px #000, 0 0 12px #ff0000;
-    }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
 
-    .myspace-divider {
-      height: 2px;
-      background: #8b0000;
-      margin: 15px 0 25px 0;
-      box-shadow: 0 0 8px #ff0000;
-    }
+        .nav-links a {
+            text-decoration: none;
+            color: #b30000;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
 
-    /* GALERÍA DE FOTOS ESTILO INSTAGRAM (1:1 CUADRADAS) */
-    .photo-gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 35px;
-      align-items: center;
-      width: 100%;
-    }
+        .nav-links a:hover {
+            color: #ff0000;
+            text-shadow: 0 0 5px #ff0000;
+        }
 
-    .insta-post {
-      width: 100%;
-      max-width: 480px;
-      aspect-ratio: 1 / 1;
-      border: 2px solid #8b0000;
-      background: #000;
-      box-shadow: 0 0 15px rgba(139, 0, 0, 0.6);
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        /* --- AREA DE CONTENIDO --- */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
 
-    .insta-post:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 25px #ff0000;
-    }
+        /* --- 2. REPRODUCTOR DE VIDEO FALLIDO (KHRISTA) --- */
+        .video-player-container {
+            border: 4px solid #b30000;
+            background-color: #000;
+            width: 80%;
+            max-width: 600px;
+            padding: 10px;
+            position: relative;
+            box-shadow: 0 0 20px #b30000;
+            margin-bottom: 20px;
+        }
 
-    .insta-post img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+        .video-header {
+            display: flex;
+            justify-content: space-between;
+            color: #ff0000;
+            font-size: 12px;
+            margin-bottom: 5px;
+            font-family: 'VT323', monospace;
+        }
 
-    /* ESTILO ANUNCIO / NOTIFICACIÓN POP-UP (ck.jpeg) */
-    .ad-popup {
-      width: 100%;
-      max-width: 460px;
-      background: #111;
-      border: 3px double #ff0000;
-      box-shadow: 0 0 25px #ff0000, inset 0 0 10px #8b0000;
-      margin: 20px 0;
-      padding: 8px;
-      position: relative;
-      animation: pulse-ad 2s infinite alternate;
-    }
+        .video-screen {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            background-color: #111;
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .ad-header {
-      background: #8b0000;
-      color: #fff;
-      font-size: 13px;
-      font-weight: bold;
-      padding: 4px 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
+        /* LA FOTO DE KHRISTA O PLACEHOLDER CON GLITCH */
+        .subject-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(150%) sepia(100%) saturate(500%) hue-rotate(-50deg); /* Efecto rojo corrupto */
+            animation: glitch 0.3s steps(1) infinite;
+            opacity: 0.8;
+        }
 
-    .ad-close-btn {
-      background: #000;
-      color: #ff0000;
-      border: 1px solid #ff0000;
-      padding: 0 5px;
-      cursor: default;
-      font-weight: bold;
-    }
+        /* Superposiciones técnicas del video (REC, LIVE, etc.) */
+        .video-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            pointer-events: none;
+            color: #ff0000;
+            font-size: 12px;
+            font-family: 'VT323', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-    .ad-body {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      border: 1px solid #8b0000;
-    }
+        /* --- 3. NOTA DE CUMPLEAÑOS CRÍPTICA --- */
+        .terminal-note {
+            width: 80%;
+            max-width: 600px;
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid #b30000;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 0 10px rgba(179, 0, 0, 0.5);
+            color: #b30000;
+            font-size: 14px;
+        }
 
-    .ad-body img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+        /* --- 5. DECORACIONES Y HUECOS PARA GIFS --- */
+        .deco-gif {
+            position: absolute;
+            max-width: 100px;
+            border: 1px solid #b30000;
+            background: #000;
+            padding: 5px;
+        }
 
-    .ad-footer {
-      font-size: 11px;
-      color: #ff3333;
-      text-transform: uppercase;
-      margin-top: 6px;
-      letter-spacing: 2px;
-      text-align: center;
-    }
+        /* Lugar para el Vampiro/Murciélago - Abajo Izquierda */
+        .deco-left {
+            bottom: 20px;
+            left: 20px;
+        }
 
-    @keyframes pulse-ad {
-      0% { box-shadow: 0 0 15px #8b0000; }
-      100% { box-shadow: 0 0 30px #ff0000; }
-    }
-  </style>
+        /* Lugar para el Gatito Emo - Abajo Derecha */
+        .deco-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        /* Lado izquierdo a media altura */
+        .deco-mid-left {
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+        }
+
+    </style>
 </head>
 <body>
 
-  <!-- PANTALLA 1 (INICIO) -->
-  <div id="screen1" class="screen">
-    <img src="https://i.pinimg.com/originals/71/49/3f/71493f6fda021c55b82c2e42a0887209.gif" alt="Warning" class="warning-gif">
-    <button class="enter-btn" onclick="enterSite()">ENTER</button>
-  </div>
-
-  <!-- PANTALLA 2 (PRINCIPAL CON FOTOS Y MÚSICA) -->
-  <div id="screen2" class="screen">
-    
-    <!-- Contenedor central MySpace / Galería -->
-    <div class="myspace-container">
-      <h1 class="myspace-header">Happy Birthday Khrista</h1>
-      <div class="myspace-divider"></div>
-      <p style="letter-spacing: 1px; margin-bottom: 25px;">🖤 Welcome to the dark side... 🖤</p>
-
-      <!-- PUBLICACIONES TIPO INSTAGRAM -->
-      <div class="photo-gallery">
-        <div class="insta-post">
-          <img src="kc.jpeg" alt="Khrista 1">
+    <!-- =========================================
+         PANTALLA 1 (INICIO)
+         ========================================= -->
+    <div id="pantalla1">
+        <div class="warn-container">
+            <!-- GIF DE ADVERTENCIA CENTRAL -->
+            <img src="https://i.pinimg.com/originals/71/49/3f/71493f6fda021c55b82c2e42a0887209.gif" alt="WARNING" class="gif-advertencia">
+            <br>
+            <button class="btn-enter" onclick="entrar()">ENTER</button>
         </div>
-        <div class="insta-post">
-          <img src="kcc.jpeg" alt="Khrista 2">
-        </div>
-
-        <!-- FOTO ck.jpeg TRANSFORMADA EN ANUNCIO / NOTIFICACIÓN -->
-        <div class="ad-popup">
-          <div class="ad-header">
-            <span>⚠️ SPONSORED AD / NOTIFICATION</span>
-            <span class="ad-close-btn">X</span>
-          </div>
-          <div class="ad-body">
-            <img src="ck.jpeg" alt="Anuncio Khrista">
-          </div>
-          <div class="ad-footer">
-            --- CLICK TO SPONSOR KHRISTA ---
-          </div>
-        </div>
-
-        <div class="insta-post">
-          <img src="kccc.jpeg" alt="Khrista 3">
-        </div>
-        <div class="insta-post">
-          <img src="kkc.jpeg" alt="Khrista 5">
-        </div>
-      </div>
-
     </div>
 
-    <!-- GIFS DECORATIVOS -->
-    <!-- Murciélago (Abajo izquierda) -->
-    <img src="https://i.pinimg.com/originals/b2/3b/ce/b23bce7e6a41d84ca9af8b94d5b18d8f.gif" alt="Murciélago" class="decor bat">
+    <!-- =========================================
+         PANTALLA 2 (DARK WEB PRINCIPAL)
+         ========================================= -->
+    <div id="pantalla2">
 
-    <!-- Gatito zombie (Abajo derecha) -->
-    <img src="https://i.pinimg.com/originals/44/06/b4/4406b49c3a5106982f83456c0cb21475.gif" alt="Gatito Zombie" class="decor zombie-cat">
+        <!-- 1. BARRA DE NAVEGACIÓN SUPERIOR -->
+        <nav class="nav-bar">
+            <div class="nav-logo">KHRISTA_NET_ARCHIVE_v3.0</div>
+            <ul class="nav-links">
+                <li><a href="#">[ ARCHIVE_MAIN ]</a></li>
+                <li><a href="#" style="color: #ff0000;">[ HUMAN_MARKET ]</a></li> <!-- El guiño humorístico -->
+                <li><a href="#">[ KHRISTA'S_WISHES ]</a></li>
+                <li><a href="#">[ SYSTEM_LOG ]</a></li>
+            </ul>
+            <div class="blink" style="color: #ff0000; font-size: 12px;">SECURE_CONNECTION</div>
+        </nav>
 
-    <!-- GIF Nuevo (Lado izquierdo) -->
-    <img src="https://i.pinimg.com/originals/48/dd/9e/48dd9e50b3c7be0dbf161a82c45bcede.gif" alt="GIF Nuevo" class="decor new-gif">
+        <!-- AREA CENTRAL -->
+        <div class="main-content">
 
-  </div>
+            <!-- 2. REPRODUCTOR DE VIDEO FALLIDO (KHRISTA) -->
+            <div class="video-player-container">
+                <div class="video-header">
+                    <span>SOURCE: SUBJECT_RECOVERY.avi</span>
+                    <span class="blink">● LIVE</span>
+                </div>
+                <div class="video-screen">
+                    <!-- BUSCA ESTO Y CAMBIA LA IMAGEN DE KHRISTA POR UN ENLACE DE PINTEREST -->
+                    <!-- Por ahora he puesto una imagen gris para que veas cómo queda -->
+                    <img src="https://via.placeholder.com/600x338/111111/333333?text=SUBJ_KHRISTA_CORRUPTED" alt="SUBJECT_KHRISTA" class="subject-image">
+                    
+                    <!-- Capa de texto encima del video -->
+                    <div class="video-overlay">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>REC [●]</span>
+                            <span class="blink" style="color: #fff;">SCANNING...</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                            <span>TIME: 00:00:13</span>
+                            <span>FREQ: 13.5Hz</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="color: #555; font-size: 10px; margin-top: 5px; text-align: center;">DATA_CORRUPTION_DETECTED // ERROR_404_K</div>
+            </div>
 
-  <!-- REPRODUCTOR DE AUDIO DIRECTO (RESPALDO FUNCIONAL) -->
-  <audio id="music-player" loop preload="auto">
-    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/f35U0LpDq8x7I2jY.mp3" type="audio/mpeg">
-  </audio>
+            <!-- 3. NOTA DE CUMPLEAÑOS -->
+            <div class="terminal-note">
+                <p>> SYSTEM_MESSAGE_RECEIVED...</p>
+                <p>> DECRYPTING...</p>
+                <p>> [ <span class="blink" style="color: #ff0000; font-weight: bold;">HAPPY_BIRTHDAY_KHRISTA_3000</span> ]</p>
+                <p>> ACCESS_GRANTED. YOU_ARE_WANTED.</p>
+                <p class="blink">_</p>
+            </div>
 
-  <script>
-    function enterSite() {
-      const s1 = document.getElementById('screen1');
-      const s2 = document.getElementById('screen2');
-      const player = document.getElementById('music-player');
+            <!-- 5. DECORACIONES Y HUECOS PARA GIFS -->
+            
+            <!-- GIF IZQUIERDO: Vampiro/Murciélago (Pon el enlace aquí cuando lo tengas) -->
+            <div class="deco-gif deco-left">
+                <img src="https://via.placeholder.com/80/000000/b30000?text=GIF_VAMPIRO" alt="Vampire deco" style="width:100%; height:auto;">
+            </div>
 
-      s1.classList.add('hidden');
-      s2.classList.add('visible');
+            <!-- GIF MEDIO-IZQUIERDO: Gato bailando (Pon el enlace aquí cuando lo tengas) -->
+            <div class="deco-gif deco-mid-left">
+                <img src="https://via.placeholder.com/80/000000/b30000?text=GIF_BAILE" alt="Gato baile deco" style="width:100%; height:auto;">
+            </div>
 
-      // Reproducción inmediata sin anuncios
-      player.play().catch(function(error) {
-        console.log("Error al reproducir audio:", error);
-      });
-    }
-  </script>
+            <!-- GIF DERECHO: Gatito Emo (Pon el enlace aquí cuando lo tengas) -->
+            <div class="deco-gif deco-right">
+                <img src="https://via.placeholder.com/80/000000/b30000?text=GIF_EMO" alt="Emo Kitty deco" style="width:100%; height:auto;">
+            </div>
+
+        </div> <!-- Fin main-content -->
+
+    </div> <!-- Fin pantalla2 -->
+
+    <!-- =========================================
+         JAVASCRIPT PARA LA TRANSICIÓN
+         ========================================= -->
+    <script>
+        function entrar() {
+            var p1 = document.getElementById('pantalla1');
+            var p2 = document.getElementById('pantalla2');
+
+            // 1. Efecto Fade Out en pantalla 1
+            p1.style.opacity = '0';
+
+            // 2. Después de 1 segundo (cuando termina el fade)
+            setTimeout(function() {
+                p1.style.display = 'none'; // Oculta p1 completamente
+                p2.style.display = 'flex'; // Muestra p2 (usando flex para centrar contenido)
+            }, 1000); 
+        }
+    </script>
 </body>
 </html>
