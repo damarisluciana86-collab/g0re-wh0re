@@ -2,398 +2,414 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL_DE_CUMPLEAÑOS_KHRISTA</title>
-    <style>
-        /* ESTILOS GENERALES (Reset & Base) */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: crosshair; /* Cursor de cruz para todo el sitio */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gorewhore.com - Khrista's Bday</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+    }
 
-        body, html {
-            height: 100%;
-            font-family: 'Courier New', Courier, monospace; /* Fuente estilo terminal */
-            overflow: hidden;
-            background-color: #000;
-            color: #b30000; /* Rojo sangre por defecto */
-        }
+    body {
+      background-color: #0d0000;
+      color: #ff3333;
+      overflow-x: hidden;
+      user-select: none;
+    }
 
-        /* FUENTE PIXELADA (Opcional, si quieres usarla) */
-        @font-face {
-            font-family: 'VT323';
-            src: url('https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEFzisfFJU.woff2') format('woff2');
-        }
+    /* --- PANTALLA 1: INICIO --- */
+    #screen1 {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('https://i.pinimg.com/originals/09/1c/3c/091c3c517f8e9b43f2933cd80b898939.gif') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 1s ease-in-out;
+    }
 
-        /* ANIMACIONES GLOBALES */
-        @keyframes blink { 50% { opacity: 0; } }
-        .blink { animation: blink 1s linear infinite; }
+    .warning-gif {
+      max-width: 80%;
+      max-height: 50vh;
+      border: 2px solid #800000;
+      box-shadow: 0 0 15px #ff0000;
+      margin-bottom: 25px;
+    }
 
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
+    .enter-btn {
+      background: #3a0000;
+      color: #ff0000;
+      border: 3px solid #ff0000;
+      padding: 15px 40px;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 5px;
+      cursor: pointer;
+      text-shadow: 0 0 5px #ff0000;
+      box-shadow: 0 0 10px #800000;
+      transition: all 0.3s ease;
+    }
 
-        @keyframes scanline {
-            0% { bottom: 100%; }
-            100% { bottom: 0%; }
-        }
+    .enter-btn:hover {
+      background: #ff0000;
+      color: #000;
+      box-shadow: 0 0 25px #ff0000;
+      transform: scale(1.1);
+    }
 
-        /* =========================================
-           PANTALLA 1 (INICIO - ADVERTENCIA) 
-           ========================================= */
-        #pantalla1 {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* GIF DE FONDO PANTALLA 1 */
-            background-image: url('https://i.pinimg.com/originals/09/1c/3c/091c3c517f8e9b43f2933cd80b898939.gif');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            transition: opacity 1s ease-out; /* Efecto Fade Out */
-        }
+    /* --- PANTALLA 2: PRINCIPAL --- */
+    #screen2 {
+      display: none;
+      opacity: 0;
+      min-height: 100vh;
+      background: url('https://i.pinimg.com/vwebp/736x/a2/8c/a1/a28ca1f13132b630c23a9ae1b9fc662c.webp') repeat;
+      transition: opacity 1s ease-in-out;
+      padding-bottom: 80px;
+    }
 
-        /* Contenedor central de advertencia */
-        .warn-container {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border: 2px solid #b30000;
-            box-shadow: 0 0 15px #b30000;
-        }
+    .header-bar {
+      background: #110000;
+      border-bottom: 2px solid #660000;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 10px #000;
+    }
 
-        /* GIF DE ADVERTENCIA CENTRAL */
-        .gif-advertencia {
-            max-width: 300px;
-            margin-bottom: 20px;
-            border: 1px solid #b30000;
-        }
+    .header-title {
+      color: #ff0000;
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 2px 2px 0px #000, 0 0 10px #ff0000;
+    }
 
-        /* BOTÓN ENTER */
-        .btn-enter {
-            background-color: transparent;
-            color: #ff0000;
-            border: 3px solid #ff0000;
-            padding: 15px 40px;
-            font-size: 24px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 5px #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
+    .main-container {
+      max-width: 1100px;
+      margin: 20px auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 0 15px;
+    }
 
-        .btn-enter:hover {
-            background-color: #ff0000;
-            color: #000;
-            box-shadow: 0 0 20px #ff0000;
-            transform: scale(1.1);
-        }
+    /* Lado Izquierdo - Reproductor */
+    .left-column {
+      flex: 2;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-        /* =========================================
-           PANTALLA 2 (PRINCIPAL - DARK WEB) 
-           ========================================= */
-        #pantalla2 {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none; /* Oculta al inicio */
-            background-color: #000;
-            /* EFECTO DE RUIDO DE TV VIEJA SUTIL */
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4u16AAAABlBMVEUAAAD///+l2Z/dAAAAbUlEQVQ4y2NgQAX8jMhABKBaYmIkGvj5+bE6mYGBgYGJmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkZGVlZFQD68AAL6QYm9gAAAABJRU5ErkJggg==');
-            z-index: 50;
-            flex-direction: column;
-        }
+    .player-box {
+      background: #000;
+      border: 2px solid #800000;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+      padding: 10px;
+    }
 
-        /* Efecto de línea de escaneo de TV */
-        #pantalla2::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100px;
-            background: rgba(255, 0, 0, 0.05);
-            animation: scanline 4s linear infinite;
-            pointer-events: none;
-            z-index: 60;
-        }
+    .main-display-img {
+      width: 100%;
+      height: 400px;
+      object-fit: contain;
+      background: #050505;
+      display: block;
+      border: 1px solid #333;
+    }
 
-        /* --- 1. BARRA DE NAVEGACIÓN "ILEGAL" --- */
-        .nav-bar {
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            border-bottom: 2px solid #b30000;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 0 10px #b30000;
-            z-index: 70;
-        }
+    .banner-gif {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 2px solid #800000;
+      box-shadow: 0 0 10px #3a0000;
+    }
 
-        .nav-logo {
-            font-weight: bold;
-            color: #ff0000;
-            text-shadow: 0 0 5px #ff0000;
-        }
+    /* Lado Derecho - Miniaturas */
+    .right-column {
+      flex: 1;
+      min-width: 250px;
+      background: rgba(10, 0, 0, 0.85);
+      border: 2px solid #550000;
+      padding: 15px;
+      display: flex;
+      flex-direction: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 520px;
+      overflow-y: auto;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-        }
+    .right-column h3 {
+      color: #ff4d4d;
+      font-size: 1.1rem;
+      border-bottom: 1px red dashed;
+      padding-bottom: 5px;
+      text-align: center;
+    }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #b30000;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
+    .thumb-item {
+      display: flex;
+      gap: 10px;
+      background: #1a0000;
+      border: 1px solid #400000;
+      padding: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
 
-        .nav-links a:hover {
-            color: #ff0000;
-            text-shadow: 0 0 5px #ff0000;
-        }
+    .thumb-item:hover {
+      background: #400000;
+      border-color: #ff0000;
+    }
 
-        /* --- AREA DE CONTENIDO --- */
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+    .thumb-item img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border: 1px solid #ff0000;
+    }
 
-        /* --- 2. REPRODUCTOR DE VIDEO FALLIDO (KHRISTA) --- */
-        .video-player-container {
-            border: 4px solid #b30000;
-            background-color: #000;
-            width: 80%;
-            max-width: 600px;
-            padding: 10px;
-            position: relative;
-            box-shadow: 0 0 20px #b30000;
-            margin-bottom: 20px;
-        }
+    .thumb-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #ccc;
+    }
 
-        .video-header {
-            display: flex;
-            justify-content: space-between;
-            color: #ff0000;
-            font-size: 12px;
-            margin-bottom: 5px;
-            font-family: 'VT323', monospace;
-        }
+    /* DECORACIONES DECORATIVAS */
+    .deco-bat {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      width: 90px;
+      pointer-events: none;
+      z-index: 50;
+    }
 
-        .video-screen {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16 / 9;
-            background-color: #111;
-            border: 1px solid #333;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .deco-cat {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 90px;
+      pointer-events: none;
+      z-index: 50;
+    }
 
-        /* LA FOTO DE KHRISTA O PLACEHOLDER CON GLITCH */
-        .subject-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%) contrast(150%) sepia(100%) saturate(500%) hue-rotate(-50deg); /* Efecto rojo corrupto */
-            animation: glitch 0.3s steps(1) infinite;
-            opacity: 0.8;
-        }
+    /* --- POP-UP WEB --- */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
 
-        /* Superposiciones técnicas del video (REC, LIVE, etc.) */
-        .video-overlay {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            pointer-events: none;
-            color: #ff0000;
-            font-size: 12px;
-            font-family: 'VT323', monospace;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    .popup-box {
+      background: #1a0000;
+      border: 3px solid #ff0000;
+      box-shadow: 0 0 25px #ff0000;
+      width: 320px;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+      animation: popIn 0.4s ease-out;
+    }
 
-        /* --- 3. NOTA DE CUMPLEAÑOS CRÍPTICA --- */
-        .terminal-note {
-            width: 80%;
-            max-width: 600px;
-            background: rgba(10, 10, 10, 0.9);
-            border: 1px solid #b30000;
-            padding: 15px;
-            margin-top: 10px;
-            box-shadow: 0 0 10px rgba(179, 0, 0, 0.5);
-            color: #b30000;
-            font-size: 14px;
-        }
+    @keyframes popIn {
+      0% { transform: scale(0.2); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
 
-        /* --- 5. DECORACIONES Y HUECOS PARA GIFS --- */
-        .deco-gif {
-            position: absolute;
-            max-width: 100px;
-            border: 1px solid #b30000;
-            background: #000;
-            padding: 5px;
-        }
+    .popup-header {
+      background: #ff0000;
+      color: #000;
+      font-weight: bold;
+      padding: 3px;
+      margin: -15px -15px 15px -15px;
+      font-size: 0.9rem;
+    }
 
-        /* Lugar para el Vampiro/Murciélago - Abajo Izquierda */
-        .deco-left {
-            bottom: 20px;
-            left: 20px;
-        }
+    .popup-btn {
+      margin-top: 15px;
+      background: #ff0000;
+      color: #000;
+      border: none;
+      padding: 8px 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-        /* Lugar para el Gatito Emo - Abajo Derecha */
-        .deco-right {
-            bottom: 20px;
-            right: 20px;
-        }
+    .popup-btn:hover {
+      background: #fff;
+    }
 
-        /* Lado izquierdo a media altura */
-        .deco-mid-left {
-            top: 50%;
-            left: 20px;
-            transform: translateY(-50%);
-        }
+    /* --- SCREAMER VIDEO SCREEN --- */
+    #screamer-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      z-index: 9999;
+    }
 
-    </style>
+    #screamer-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* EFECTO GLITCH/ERROR */
+    .glitch-active {
+      animation: flashError 0.1s infinite;
+    }
+
+    @keyframes flashError {
+      0% { background-color: red; filter: invert(100%); }
+      50% { background-color: black; filter: invert(0%); }
+      100% { background-color: darkred; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- =========================================
-         PANTALLA 1 (INICIO)
-         ========================================= -->
-    <div id="pantalla1">
-        <div class="warn-container">
-            <!-- GIF DE ADVERTENCIA CENTRAL -->
-            <img src="https://i.pinimg.com/originals/71/49/3f/71493f6fda021c55b82c2e42a0887209.gif" alt="WARNING" class="gif-advertencia">
-            <br>
-            <button class="btn-enter" onclick="entrar()">ENTER</button>
-        </div>
+  <div id="screen1">
+    <img src="https://i.pinimg.com/originals/71/49/3f/71493f6fda021c55b82c2e42a0887209.gif" alt="Warning" class="warning-gif">
+    <button class="enter-btn" onclick="enterSite()">ENTER</button>
+  </div>
+
+  <div id="screen2">
+    <div class="header-bar">
+      <h1 class="header-title">gorewhore.com</h1>
     </div>
 
-    <!-- =========================================
-         PANTALLA 2 (DARK WEB PRINCIPAL)
-         ========================================= -->
-    <div id="pantalla2">
+    <div class="main-container">
+      <div class="left-column">
+        <div class="player-box">
+          <img id="mainViewer" src="kc.jpeg" alt="Khrista Photo" class="main-display-img">
+        </div>
+        <img src="https://i.pinimg.com/originals/e9/5f/61/e95f6113b20646cc773f23a56c70a610.gif" class="banner-gif" alt="Horror Gif">
+      </div>
 
-        <!-- 1. BARRA DE NAVEGACIÓN SUPERIOR -->
-        <nav class="nav-bar">
-            <div class="nav-logo">KHRISTA_NET_ARCHIVE_v3.0</div>
-            <ul class="nav-links">
-                <li><a href="#">[ ARCHIVE_MAIN ]</a></li>
-                <li><a href="#" style="color: #ff0000;">[ HUMAN_MARKET ]</a></li> <!-- El guiño humorístico -->
-                <li><a href="#">[ KHRISTA'S_WISHES ]</a></li>
-                <li><a href="#">[ SYSTEM_LOG ]</a></li>
-            </ul>
-            <div class="blink" style="color: #ff0000; font-size: 12px;">SECURE_CONNECTION</div>
-        </nav>
+      <div class="right-column">
+        <h3>MORE_FILES_</h3>
 
-        <!-- AREA CENTRAL -->
-        <div class="main-content">
+        <div class="thumb-item" onclick="changeImage('kc.jpeg')">
+          <img src="kc.jpeg" alt="kc">
+          <div class="thumb-info">
+            <strong>khrista_01.jpg</strong>
+            <span>View Photo</span>
+          </div>
+        </div>
 
-            <!-- 2. REPRODUCTOR DE VIDEO FALLIDO (KHRISTA) -->
-            <div class="video-player-container">
-                <div class="video-header">
-                    <span>SOURCE: SUBJECT_RECOVERY.avi</span>
-                    <span class="blink">● LIVE</span>
-                </div>
-                <div class="video-screen">
-                    <!-- BUSCA ESTO Y CAMBIA LA IMAGEN DE KHRISTA POR UN ENLACE DE PINTEREST -->
-                    <!-- Por ahora he puesto una imagen gris para que veas cómo queda -->
-                    <img src="https://via.placeholder.com/600x338/111111/333333?text=SUBJ_KHRISTA_CORRUPTED" alt="SUBJECT_KHRISTA" class="subject-image">
-                    
-                    <!-- Capa de texto encima del video -->
-                    <div class="video-overlay">
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>REC [●]</span>
-                            <span class="blink" style="color: #fff;">SCANNING...</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                            <span>TIME: 00:00:13</span>
-                            <span>FREQ: 13.5Hz</span>
-                        </div>
-                    </div>
-                </div>
-                <div style="color: #555; font-size: 10px; margin-top: 5px; text-align: center;">DATA_CORRUPTION_DETECTED // ERROR_404_K</div>
-            </div>
+        <div class="thumb-item" onclick="changeImage('kcc.jpeg')">
+          <img src="kcc.jpeg" alt="kcc">
+          <div class="thumb-info">
+            <strong>khrista_02.jpg</strong>
+            <span>View Photo</span>
+          </div>
+        </div>
 
-            <!-- 3. NOTA DE CUMPLEAÑOS -->
-            <div class="terminal-note">
-                <p>> SYSTEM_MESSAGE_RECEIVED...</p>
-                <p>> DECRYPTING...</p>
-                <p>> [ <span class="blink" style="color: #ff0000; font-weight: bold;">HAPPY_BIRTHDAY_KHRISTA_3000</span> ]</p>
-                <p>> ACCESS_GRANTED. YOU_ARE_WANTED.</p>
-                <p class="blink">_</p>
-            </div>
+        <div class="thumb-item" onclick="changeImage('kccc.jpeg')">
+          <img src="kccc.jpeg" alt="kccc">
+          <div class="thumb-info">
+            <strong>khrista_03.jpg</strong>
+            <span>View Photo</span>
+          </div>
+        </div>
 
-            <!-- 5. DECORACIONES Y HUECOS PARA GIFS -->
-            
-            <!-- GIF IZQUIERDO: Vampiro/Murciélago (Pon el enlace aquí cuando lo tengas) -->
-            <div class="deco-gif deco-left">
-                <img src="https://via.placeholder.com/80/000000/b30000?text=GIF_VAMPIRO" alt="Vampire deco" style="width:100%; height:auto;">
-            </div>
+        <div class="thumb-item" onclick="changeImage('ck.jpe')">
+          <img src="ck.jpe" alt="ck">
+          <div class="thumb-info">
+            <strong>khrista_04.jpg</strong>
+            <span>View Photo</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <!-- GIF MEDIO-IZQUIERDO: Gato bailando (Pon el enlace aquí cuando lo tengas) -->
-            <div class="deco-gif deco-mid-left">
-                <img src="https://via.placeholder.com/80/000000/b30000?text=GIF_BAILE" alt="Gato baile deco" style="width:100%; height:auto;">
-            </div>
+    <img src="https://i.pinimg.com/originals/a7/dc/06/a7dc06235cbbcdec007dfed58146265e.gif" class="deco-bat" alt="Murciélago">
+    <img src="https://i.pinimg.com/originals/72/93/93/7293934821795dbe7206aa3cb1beaea5.gif" class="deco-cat" alt="Gatito Zombie">
+  </div>
 
-            <!-- GIF DERECHO: Gatito Emo (Pon el enlace aquí cuando lo tengas) -->
-            <div class="deco-gif deco-right">
-                <img src="https://via.placeholder.com/80/000000/b30000?text=GIF_EMO" alt="Emo Kitty deco" style="width:100%; height:auto;">
-            </div>
+  <div id="popUp" class="popup-overlay">
+    <div class="popup-box">
+      <div class="popup-header">SYSTEM WARNING !</div>
+      <p style="color: #fff; font-size: 0.9rem;">CRITICAL ERROR: Unexpected file detected on server.</p>
+      <button class="popup-btn" onclick="triggerScream()">FIX ERROR</button>
+    </div>
+  </div>
 
-        </div> <!-- Fin main-content -->
+  <div id="screamer-container">
+    <video id="screamer-video" preload="auto">
+      <source src="scream.mp4" type="video/mp4">
+    </video>
+  </div>
 
-    </div> <!-- Fin pantalla2 -->
+  <script>
+    function enterSite() {
+      const s1 = document.getElementById('screen1');
+      const s2 = document.getElementById('screen2');
 
-    <!-- =========================================
-         JAVASCRIPT PARA LA TRANSICIÓN
-         ========================================= -->
-    <script>
-        function entrar() {
-            var p1 = document.getElementById('pantalla1');
-            var p2 = document.getElementById('pantalla2');
+      s1.style.opacity = '0';
+      setTimeout(() => {
+        s1.style.display = 'none';
+        s2.style.display = 'block';
+        setTimeout(() => {
+          s2.style.opacity = '1';
+          schedulePopup();
+        }, 50);
+      }, 1000);
+    }
 
-            // 1. Efecto Fade Out en pantalla 1
-            p1.style.opacity = '0';
+    function changeImage(src) {
+      document.getElementById('mainViewer').src = src;
+    }
 
-            // 2. Después de 1 segundo (cuando termina el fade)
-            setTimeout(function() {
-                p1.style.display = 'none'; // Oculta p1 completamente
-                p2.style.display = 'flex'; // Muestra p2 (usando flex para centrar contenido)
-            }, 1000); 
-        }
-    </script>
+    function schedulePopup() {
+      // Aparece la notificación pop-up automáticamente después de 4 segundos
+      setTimeout(() => {
+        document.getElementById('popUp').style.display = 'flex';
+      }, 4000);
+    }
+
+    function triggerScream() {
+      document.getElementById('popUp').style.display = 'none';
+      document.body.classList.add('glitch-active');
+
+      // Efecto de parpadeo/error rápido antes del susto
+      setTimeout(() => {
+        document.body.classList.remove('glitch-active');
+        const container = document.getElementById('screamer-container');
+        const video = document.getElementById('screamer-video');
+        
+        container.style.display = 'block';
+        video.play();
+
+        // Al finalizar el video, oculta la pantalla de susto
+        video.onended = function() {
+          container.style.display = 'none';
+        };
+      }, 700);
+    }
+  </script>
 </body>
 </html>
