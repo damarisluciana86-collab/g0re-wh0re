@@ -71,7 +71,7 @@
       min-height: 100vh;
       background: url('https://i.pinimg.com/vwebp/736x/a2/8c/a1/a28ca1f13132b630c23a9ae1b9fc662c.webp') repeat;
       transition: opacity 1s ease-in-out;
-      padding-bottom: 80px;
+      padding-bottom: 120px;
     }
 
     .header-bar {
@@ -111,18 +111,47 @@
 
     .player-box {
       background: #000;
-      border: 2px solid #800000;
-      box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-      padding: 10px;
+      border: 3px solid #ff0000;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+      padding: 5px;
+      position: relative;
     }
 
     .main-display-img {
       width: 100%;
       height: 400px;
-      object-fit: contain;
+      object-fit: cover; /* Completa todo el marco sin dejar espacios vacíos */
       background: #050505;
       display: block;
-      border: 1px solid #333;
+    }
+
+    /* Ícono overlay de reproductor de video (Estilo YouTube) */
+    .play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 65px;
+      height: 65px;
+      background: rgba(170, 0, 0, 0.75);
+      border: 2px solid #ff0000;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      box-shadow: 0 0 15px #ff0000;
+    }
+
+    .play-overlay::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 20px solid #ffffff;
+      margin-left: 4px;
     }
 
     .banner-gif {
@@ -188,18 +217,18 @@
     /* DECORACIONES */
     .deco-bat {
       position: fixed;
-      bottom: 10px;
-      left: 10px;
-      width: 90px;
+      bottom: 0px;
+      left: 0px;
+      width: 110px;
       pointer-events: none;
       z-index: 50;
     }
 
     .deco-cat {
       position: fixed;
-      bottom: 10px;
-      right: 10px;
-      width: 160px; /* Tamaño mediano/más grande */
+      bottom: 0px;
+      right: 0px;
+      width: 260px; /* Gatito Zombie súper grande */
       pointer-events: none;
       z-index: 50;
     }
@@ -257,7 +286,7 @@
       background: #fff;
     }
 
-    /* --- SCREAMER VIDEO SCREEN --- */
+    /* --- SCREAMER IMAGE CONTAINER --- */
     #screamer-container {
       display: none;
       position: fixed;
@@ -269,7 +298,7 @@
       z-index: 9999;
     }
 
-    #screamer-video {
+    #screamer-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -289,8 +318,9 @@
 </head>
 <body>
 
-  <!-- MÚSICA DE FONDO -->
-  <audio id="bgMusic" src="cancion.mp3" loop></audio>
+  <!-- AUDIOS -->
+  <audio id="bgMusic" src="TikVid.io_7653536705982582024 (1).mp3" loop></audio>
+  <audio id="screamSound" src="TikVid.io_7561542774567226654.mp3" preload="auto"></audio>
 
   <!-- PANTALLA 1 -->
   <div id="screen1">
@@ -309,6 +339,7 @@
       <div class="left-column">
         <div class="player-box">
           <img id="mainViewer" src="kc.jpeg" alt="Khrista Photo" class="main-display-img">
+          <div class="play-overlay"></div>
         </div>
         <img src="https://i.pinimg.com/originals/e9/5f/61/e95f6113b20646cc773f23a56c70a610.gif" class="banner-gif" alt="Horror Gif">
       </div>
@@ -321,7 +352,7 @@
           <img src="kc.jpeg" alt="kc">
           <div class="thumb-info">
             <strong>khrista_01.jpg</strong>
-            <span>View Photo</span>
+            <span>▶ Play Video</span>
           </div>
         </div>
 
@@ -329,7 +360,7 @@
           <img src="kcc.jpeg" alt="kcc">
           <div class="thumb-info">
             <strong>khrista_02.jpg</strong>
-            <span>View Photo</span>
+            <span>▶ Play Video</span>
           </div>
         </div>
 
@@ -337,16 +368,15 @@
           <img src="kccc.jpeg" alt="kccc">
           <div class="thumb-info">
             <strong>khrista_03.jpg</strong>
-            <span>View Photo</span>
+            <span>▶ Play Video</span>
           </div>
         </div>
 
-        <!-- Corregido a ck.jpeg -->
         <div class="thumb-item" onclick="changeImage('ck.jpeg')">
           <img src="ck.jpeg" alt="ck">
           <div class="thumb-info">
             <strong>khrista_04.jpg</strong>
-            <span>View Photo</span>
+            <span>▶ Play Video</span>
           </div>
         </div>
       </div>
@@ -366,11 +396,9 @@
     </div>
   </div>
 
-  <!-- SCREAMER VIDEO CONTAINER -->
+  <!-- SCREAMER IMAGE CONTAINER -->
   <div id="screamer-container">
-    <video id="screamer-video" preload="auto">
-      <source src="scream.mp4" type="video/mp4">
-    </video>
+    <img id="screamer-image" src="monchicara.jpeg" alt="Screamer">
   </div>
 
   <script>
@@ -379,7 +407,6 @@
       const s2 = document.getElementById('screen2');
       const music = document.getElementById('bgMusic');
 
-      // Inicia la música de fondo
       music.play();
 
       s1.style.opacity = '0';
@@ -406,22 +433,25 @@
 
     function triggerScream() {
       const music = document.getElementById('bgMusic');
-      music.pause(); // Pausa la música de fondo para que se escuche el susto
+      const screamSound = document.getElementById('screamSound');
+      const container = document.getElementById('screamer-container');
+
+      music.pause(); // Detiene la música de fondo
 
       document.getElementById('popUp').style.display = 'none';
       document.body.classList.add('glitch-active');
 
       setTimeout(() => {
         document.body.classList.remove('glitch-active');
-        const container = document.getElementById('screamer-container');
-        const video = document.getElementById('screamer-video');
-        
         container.style.display = 'block';
-        video.play();
+        
+        // Reproduce el audio de susto
+        screamSound.play();
 
-        video.onended = function() {
+        // Cuando el audio de susto termina, desaparece la foto y vuelve la música
+        screamSound.onended = function() {
           container.style.display = 'none';
-          music.play(); // Reanuda la música al terminar el video
+          music.play();
         };
       }, 700);
     }
