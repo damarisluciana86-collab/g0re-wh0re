@@ -91,6 +91,15 @@
       text-shadow: 2px 2px 0px #000, 0 0 10px #ff0000;
     }
 
+    .header-subtitle {
+      color: #ff6666;
+      font-size: 1.1rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-top: 5px;
+      text-shadow: 0 0 5px #ff0000;
+    }
+
     .main-container {
       max-width: 1100px;
       margin: 20px auto;
@@ -120,12 +129,12 @@
     .main-display-img {
       width: 100%;
       height: 400px;
-      object-fit: cover; /* Completa todo el marco sin dejar espacios vacíos */
+      object-fit: cover;
       background: #050505;
       display: block;
     }
 
-    /* Ícono overlay de reproductor de video (Estilo YouTube) */
+    /* Ícono overlay de reproductor de video */
     .play-overlay {
       position: absolute;
       top: 50%;
@@ -228,7 +237,7 @@
       position: fixed;
       bottom: 0px;
       right: 0px;
-      width: 260px; /* Gatito Zombie súper grande */
+      width: 260px;
       pointer-events: none;
       z-index: 50;
     }
@@ -286,7 +295,7 @@
       background: #fff;
     }
 
-    /* --- SCREAMER IMAGE CONTAINER --- */
+    /* --- SCREAMER CONTAINER --- */
     #screamer-container {
       display: none;
       position: fixed;
@@ -332,6 +341,7 @@
   <div id="screen2">
     <div class="header-bar">
       <h1 class="header-title">gorewhore.com</h1>
+      <div class="header-subtitle">★ feliz cumpleaños khrista ★</div>
     </div>
 
     <div class="main-container">
@@ -425,10 +435,10 @@
     }
 
     function schedulePopup() {
-      // El pop-up aparece a los 3 minutos (180,000 milisegundos)
+      // El pop-up aparece exactamente a los 55 segundos (55,000 milisegundos)
       setTimeout(() => {
         document.getElementById('popUp').style.display = 'flex';
-      }, 180000);
+      }, 55000);
     }
 
     function triggerScream() {
@@ -436,7 +446,7 @@
       const screamSound = document.getElementById('screamSound');
       const container = document.getElementById('screamer-container');
 
-      music.pause(); // Detiene la música de fondo
+      music.pause();
 
       document.getElementById('popUp').style.display = 'none';
       document.body.classList.add('glitch-active');
@@ -445,10 +455,8 @@
         document.body.classList.remove('glitch-active');
         container.style.display = 'block';
         
-        // Reproduce el audio de susto
         screamSound.play();
 
-        // Cuando el audio de susto termina, desaparece la foto y vuelve la música
         screamSound.onended = function() {
           container.style.display = 'none';
           music.play();
