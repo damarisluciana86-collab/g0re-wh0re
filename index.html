@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>gorewhore.com - Khrista's Bday</title>
+  <title>cannibalgirl.com - Khrista's Bday</title>
   <style>
     * {
       box-sizing: border-box;
@@ -71,7 +71,7 @@
       min-height: 100vh;
       background: url('https://i.pinimg.com/vwebp/736x/a2/8c/a1/a28ca1f13132b630c23a9ae1b9fc662c.webp') repeat;
       transition: opacity 1s ease-in-out;
-      padding-bottom: 120px;
+      padding-bottom: 140px;
     }
 
     .header-bar {
@@ -122,19 +122,18 @@
       background: #000;
       border: 3px solid #ff0000;
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-      padding: 5px;
+      padding: 10px;
       position: relative;
     }
 
     .main-display-img {
       width: 100%;
-      height: 400px;
-      object-fit: cover;
+      height: 420px;
+      object-fit: contain; /* Muestra la foto completa sin recortar ni estirar */
       background: #050505;
       display: block;
     }
 
-    /* Ícono overlay de reproductor de video */
     .play-overlay {
       position: absolute;
       top: 50%;
@@ -171,17 +170,23 @@
       box-shadow: 0 0 10px #3a0000;
     }
 
-    /* Lado Derecho - Miniaturas */
+    /* Lado Derecho - Miniaturas y Comentarios */
     .right-column {
       flex: 1;
-      min-width: 250px;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .thumbs-box {
       background: rgba(10, 0, 0, 0.85);
       border: 2px solid #550000;
       padding: 15px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      max-height: 520px;
+      max-height: 280px;
       overflow-y: auto;
     }
 
@@ -223,12 +228,78 @@
       color: #ccc;
     }
 
+    /* CAJA DE COMENTARIOS */
+    .comments-box {
+      background: rgba(10, 0, 0, 0.85);
+      border: 2px solid #550000;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .comment-input, .comment-textarea {
+      width: 100%;
+      background: #000;
+      border: 1px solid #aa0000;
+      color: #ff6666;
+      padding: 6px;
+      font-size: 0.85rem;
+    }
+
+    .comment-textarea {
+      height: 50px;
+      resize: none;
+    }
+
+    .comment-btn, .see-more-btn {
+      background: #400000;
+      color: #ffaaaa;
+      border: 1px solid #ff0000;
+      padding: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    .comment-btn:hover, .see-more-btn:hover {
+      background: #ff0000;
+      color: #000;
+    }
+
+    .comment-list {
+      max-height: 110px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid #330000;
+      padding-top: 8px;
+    }
+
+    .comment-single {
+      background: #110000;
+      border-left: 2px solid #ff0000;
+      padding: 5px 8px;
+      font-size: 0.8rem;
+    }
+
+    .comment-author {
+      color: #ff3333;
+      font-weight: bold;
+    }
+
+    .comment-text {
+      color: #ddd;
+    }
+
     /* DECORACIONES */
-    .deco-bat {
+    .deco-new-gif {
       position: fixed;
       bottom: 0px;
       left: 0px;
-      width: 110px;
+      width: 130px; /* Nuevo GIF animado */
       pointer-events: none;
       z-index: 50;
     }
@@ -242,7 +313,43 @@
       z-index: 50;
     }
 
-    /* --- POP-UP WEB --- */
+    /* MODAL DE COMENTARIOS (VER MÁS) */
+    .comments-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .comments-modal-box {
+      background: #110000;
+      border: 2px solid #ff0000;
+      box-shadow: 0 0 20px #ff0000;
+      width: 90%;
+      max-width: 500px;
+      max-height: 70vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      position: relative;
+    }
+
+    .modal-comments-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 50vh;
+    }
+
+    /* POP-UP WEB */
     .popup-overlay {
       display: none;
       position: fixed;
@@ -295,7 +402,7 @@
       background: #fff;
     }
 
-    /* --- SCREAMER CONTAINER --- */
+    /* SCREAMER CONTAINER */
     #screamer-container {
       display: none;
       position: fixed;
@@ -313,7 +420,6 @@
       object-fit: cover;
     }
 
-    /* EFECTO GLITCH/ERROR */
     .glitch-active {
       animation: flashError 0.1s infinite;
     }
@@ -340,7 +446,7 @@
   <!-- PANTALLA 2 -->
   <div id="screen2">
     <div class="header-bar">
-      <h1 class="header-title">gorewhore.com</h1>
+      <h1 class="header-title">cannibalgirl.com</h1>
       <div class="header-subtitle">★ feliz cumpleaños khrista ★</div>
     </div>
 
@@ -354,46 +460,67 @@
         <img src="https://i.pinimg.com/originals/e9/5f/61/e95f6113b20646cc773f23a56c70a610.gif" class="banner-gif" alt="Horror Gif">
       </div>
 
-      <!-- LADO DERECHO (ESTILO YOUTUBE) -->
+      <!-- LADO DERECHO -->
       <div class="right-column">
-        <h3>MORE_FILES_</h3>
+        <!-- MINIATURAS -->
+        <div class="thumbs-box">
+          <h3>MORE_FILES_</h3>
 
-        <div class="thumb-item" onclick="changeImage('kc.jpeg')">
-          <img src="kc.jpeg" alt="kc">
-          <div class="thumb-info">
-            <strong>khrista_01.jpg</strong>
-            <span>▶ Play Video</span>
+          <div class="thumb-item" onclick="changeImage('kc.jpeg')">
+            <img src="kc.jpeg" alt="kc">
+            <div class="thumb-info">
+              <strong>khrista_01.jpg</strong>
+              <span>▶ Play Video</span>
+            </div>
+          </div>
+
+          <div class="thumb-item" onclick="changeImage('kcc.jpeg')">
+            <img src="kcc.jpeg" alt="kcc">
+            <div class="thumb-info">
+              <strong>khrista_02.jpg</strong>
+              <span>▶ Play Video</span>
+            </div>
+          </div>
+
+          <div class="thumb-item" onclick="changeImage('kccc.jpeg')">
+            <img src="kccc.jpeg" alt="kccc">
+            <div class="thumb-info">
+              <strong>khrista_03.jpg</strong>
+              <span>▶ Play Video</span>
+            </div>
+          </div>
+
+          <div class="thumb-item" onclick="changeImage('kkc.jpeg')">
+            <img src="kkc.jpeg" alt="kkc">
+            <div class="thumb-info">
+              <strong>khrista_04.jpg</strong>
+              <span>▶ Play Video</span>
+            </div>
           </div>
         </div>
 
-        <div class="thumb-item" onclick="changeImage('kcc.jpeg')">
-          <img src="kcc.jpeg" alt="kcc">
-          <div class="thumb-info">
-            <strong>khrista_02.jpg</strong>
-            <span>▶ Play Video</span>
-          </div>
-        </div>
+        <!-- CAJA DE COMENTARIOS -->
+        <div class="comments-box">
+          <h3>COMMENTS_</h3>
+          <input type="text" id="authorInput" class="comment-input" placeholder="Tu nombre...">
+          <textarea id="textInput" class="comment-textarea" placeholder="Tu comentario para Khrista..."></textarea>
+          <button class="comment-btn" onclick="addComment()">COMENDAR / POST</button>
 
-        <div class="thumb-item" onclick="changeImage('kccc.jpeg')">
-          <img src="kccc.jpeg" alt="kccc">
-          <div class="thumb-info">
-            <strong>khrista_03.jpg</strong>
-            <span>▶ Play Video</span>
+          <div class="comment-list" id="commentsContainer">
+            <!-- Comentario por defecto -->
+            <div class="comment-single">
+              <span class="comment-author">Admin:</span>
+              <span class="comment-text">¡Deja tu mensaje de cumpleaños para Khrista!</span>
+            </div>
           </div>
-        </div>
 
-        <div class="thumb-item" onclick="changeImage('ck.jpeg')">
-          <img src="ck.jpeg" alt="ck">
-          <div class="thumb-info">
-            <strong>khrista_04.jpg</strong>
-            <span>▶ Play Video</span>
-          </div>
+          <button class="see-more-btn" onclick="openCommentsModal()">VER MÁS COMENTARIOS</button>
         </div>
       </div>
     </div>
 
     <!-- DECORACIONES -->
-    <img src="https://i.pinimg.com/originals/a7/dc/06/a7dc06235cbbcdec007dfed58146265e.gif" class="deco-bat" alt="Murciélago">
+    <img src="https://i.pinimg.com/originals/14/70/cc/1470ccc5095f8ae324a8b30b87508306.gif" class="deco-new-gif" alt="Nuevo Gif Animado">
     <img src="https://i.pinimg.com/originals/72/93/93/7293934821795dbe7206aa3cb1beaea5.gif" class="deco-cat" alt="Gatito Zombie">
   </div>
 
@@ -406,12 +533,25 @@
     </div>
   </div>
 
-  <!-- SCREAMER IMAGE CONTAINER -->
+  <!-- MODAL VER MÁS COMENTARIOS -->
+  <div id="commentsModal" class="comments-modal">
+    <div class="comments-modal-box">
+      <h3 style="text-align: center; border-bottom: 1px red dashed; padding-bottom: 5px;">ALL_COMMENTS_</h3>
+      <div class="modal-comments-list" id="modalCommentsContainer"></div>
+      <button class="see-more-btn" onclick="closeCommentsModal()">CERRAR</button>
+    </div>
+  </div>
+
+  <!-- SCREAMER CONTAINER -->
   <div id="screamer-container">
-    <img id="screamer-image" src="carita.jpeg" alt="Screamer">
+    <img id="screamer-image" src="monchicara.jpeg" alt="Screamer">
   </div>
 
   <script>
+    const commentsData = [
+      { author: "Admin", text: "¡Deja tu mensaje de cumpleaños para Khrista!" }
+    ];
+
     function enterSite() {
       const s1 = document.getElementById('screen1');
       const s2 = document.getElementById('screen2');
@@ -435,10 +575,10 @@
     }
 
     function schedulePopup() {
-      // El pop-up aparece exactamente a los 30 segundos (30,000 milisegundos)
+      // Configurado a 25 segundos (25,000 ms)
       setTimeout(() => {
         document.getElementById('popUp').style.display = 'flex';
-      }, 55000);
+      }, 25000);
     }
 
     function triggerScream() {
@@ -462,6 +602,61 @@
           music.play();
         };
       }, 700);
+    }
+
+    /* LÓGICA DE COMENTARIOS */
+    function renderComments() {
+      const container = document.getElementById('commentsContainer');
+      const modalContainer = document.getElementById('modalCommentsContainer');
+      
+      container.innerHTML = '';
+      modalContainer.innerHTML = '';
+
+      commentsData.forEach(c => {
+        const html = `
+          <div class="comment-single">
+            <span class="comment-author">${escapeHtml(c.author)}:</span>
+            <span class="comment-text">${escapeHtml(c.text)}</span>
+          </div>
+        `;
+        container.innerHTML += html;
+        modalContainer.innerHTML += html;
+      });
+    }
+
+    function addComment() {
+      const authorInput = document.getElementById('authorInput');
+      const textInput = document.getElementById('textInput');
+
+      const author = authorInput.value.trim() || "Anónimo";
+      const text = textInput.value.trim();
+
+      if(text !== "") {
+        commentsData.push({ author, text });
+        authorInput.value = '';
+        textInput.value = '';
+        renderComments();
+      }
+    }
+
+    function openCommentsModal() {
+      document.getElementById('commentsModal').style.display = 'flex';
+    }
+
+    function closeCommentsModal() {
+      document.getElementById('commentsModal').style.display = 'none';
+    }
+
+    function escapeHtml(string) {
+      return String(string).replace(/[&<>"']/g, function (s) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[s];
+      });
     }
   </script>
 </body>
