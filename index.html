@@ -129,7 +129,7 @@
     .main-display-img {
       width: 100%;
       height: 420px;
-      object-fit: contain; /* Muestra la foto completa sin recortar ni estirar */
+      object-fit: contain;
       background: #050505;
       display: block;
     }
@@ -283,6 +283,7 @@
       border-left: 2px solid #ff0000;
       padding: 5px 8px;
       font-size: 0.8rem;
+      word-break: break-word;
     }
 
     .comment-author {
@@ -299,7 +300,7 @@
       position: fixed;
       bottom: 0px;
       left: 0px;
-      width: 130px; /* Nuevo GIF animado */
+      width: 130px;
       pointer-events: none;
       z-index: 50;
     }
@@ -504,15 +505,9 @@
           <h3>COMMENTS_</h3>
           <input type="text" id="authorInput" class="comment-input" placeholder="Tu nombre...">
           <textarea id="textInput" class="comment-textarea" placeholder="Tu comentario para Khrista..."></textarea>
-          <button class="comment-btn" onclick="addComment()">COMENDAR / POST</button>
+          <button class="comment-btn" onclick="addComment()">COMENTAR / POST</button>
 
-          <div class="comment-list" id="commentsContainer">
-            <!-- Comentario por defecto -->
-            <div class="comment-single">
-              <span class="comment-author">Admin:</span>
-              <span class="comment-text">¡Deja tu mensaje de cumpleaños para Khrista!</span>
-            </div>
-          </div>
+          <div class="comment-list" id="commentsContainer"></div>
 
           <button class="see-more-btn" onclick="openCommentsModal()">VER MÁS COMENTARIOS</button>
         </div>
@@ -544,13 +539,21 @@
 
   <!-- SCREAMER CONTAINER -->
   <div id="screamer-container">
-    <img id="screamer-image" src="carita.jpeg" alt="Screamer">
+    <img id="screamer-image" src="monchicara.jpeg" alt="Screamer">
   </div>
 
   <script>
-    const commentsData = [
+    // Carga inicial desde localStorage o asigna un valor por defecto
+    const defaultComments = [
       { author: "Admin", text: "¡Deja tu mensaje de cumpleaños para Khrista!" }
     ];
+
+    let commentsData = JSON.parse(localStorage.getItem('khrista_bday_comments')) || defaultComments;
+
+    // Guardar en almacenamiento local
+    function saveComments() {
+      localStorage.setItem('khrista_bday_comments', JSON.stringify(commentsData));
+    }
 
     function enterSite() {
       const s1 = document.getElementById('screen1');
@@ -575,7 +578,6 @@
     }
 
     function schedulePopup() {
-      // Configurado a 25 segundos (25,000 ms)
       setTimeout(() => {
         document.getElementById('popUp').style.display = 'flex';
       }, 25000);
@@ -604,7 +606,7 @@
       }, 700);
     }
 
-    /* LÓGICA DE COMENTARIOS */
+    /* LÓGICA DE COMENTARIOS CON PERSISTENCIA */
     function renderComments() {
       const container = document.getElementById('commentsContainer');
       const modalContainer = document.getElementById('modalCommentsContainer');
@@ -633,6 +635,7 @@
 
       if(text !== "") {
         commentsData.push({ author, text });
+        saveComments(); // Se guardan en el almacenamiento local
         authorInput.value = '';
         textInput.value = '';
         renderComments();
@@ -658,6 +661,9 @@
         }[s];
       });
     }
+
+    // Cargar comentarios guardados al iniciar
+    renderComments();
   </script>
 </body>
 </html>
